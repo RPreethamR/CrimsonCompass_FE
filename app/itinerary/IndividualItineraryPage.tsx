@@ -64,7 +64,20 @@ const IndividualItineraryPage: React.FC<{ id: string }> = ({ id }) => {
       setMasterItinerary(fcData);
     };
     request();
-  }, []);
+  }, [id]);
+
+  const refreshData = async () => {
+    const session = await getSession();
+    const res = await fetch(`/api/itineraries/master/${id}`, {
+      headers: { Authorization: `Bearer ${session?.user.accessToken}` },
+    });
+    const body: MasterItineraryDetail = await res.json();
+    const fcData: MasterItineraryDetailWithFC = {
+      ...body,
+      fc: body.itineraries.map((itinerary) => itineraryDetailToFC(itinerary)),
+    };
+    setMasterItinerary(fcData);
+  };
 
   const handleEdit = (
     id: number,
@@ -73,7 +86,6 @@ const IndividualItineraryPage: React.FC<{ id: string }> = ({ id }) => {
   ) => {
     setEditingField({ id, field });
     setTempValue(currentValue);
-    console.log(currentValue);
   };
 
   const handleSave = () => {
@@ -112,7 +124,7 @@ const IndividualItineraryPage: React.FC<{ id: string }> = ({ id }) => {
         body: JSON.stringify(correctCRData),
       });
       setShowModal(false);
-      window.location.reload();
+      await refreshData();
     };
     request();
   };
@@ -137,7 +149,7 @@ const IndividualItineraryPage: React.FC<{ id: string }> = ({ id }) => {
         },
       });
       setShowModal(false);
-      window.location.reload();
+      await refreshData();
     };
     request();
   };
@@ -178,7 +190,7 @@ const IndividualItineraryPage: React.FC<{ id: string }> = ({ id }) => {
         body: JSON.stringify(instanceData),
       });
       setShowModal(false);
-      window.location.reload();
+      await refreshData();
     };
     request();
   };
@@ -197,8 +209,8 @@ const IndividualItineraryPage: React.FC<{ id: string }> = ({ id }) => {
       typeof instance[field] === "string" || typeof instance[field] === "number"
         ? instance[field]
         : typeof instance[field] === "object"
-        ? instance[field]["name"]
-        : instance[field];
+          ? instance[field]["name"]
+          : instance[field];
 
     return (
       <div className="flex flex-col gap-1 text-base">
@@ -439,7 +451,7 @@ const IndividualItineraryPage: React.FC<{ id: string }> = ({ id }) => {
               <option value="FLIGHT">Flight</option>
             </select>
             <input
-              type="transportEntityId"
+              type="number"
               placeholder="Transportation ID"
               value={newInstance.transportEntityId}
               onChange={(e) =>

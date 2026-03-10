@@ -1,39 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧭 Crimson Compass — Tour Management System
 
-## Getting Started
+A full-featured **tour management web application** built with **Next.js 15**, **React 19**, and **TypeScript**. Users can explore destinations, compare hotels, search flights, build multi-day itineraries, and manage bookings — all backed by a RESTful microservices API.
 
-Please install this package for search bar
-"npm install lodash.debounce"
 
-First, run the development server:
+---
+
+## ✨ Key Features
+
+| Feature | Description |
+|---------|-------------|
+| **Destination Explorer** | Browse hotels and places with photo galleries, reviews, area info, and Google Maps integration |
+| **Smart Search** | Debounced global search across hotels and places with real-time dropdown results |
+| **Itinerary Builder** | Create, edit, and manage multi-day itineraries with accommodation, transportation, and activity entries |
+| **Flight Search** | Search and filter flights by route, date, and class |
+| **Authentication** | Credential login/signup + Google OAuth via NextAuth.js, with JWT token management and middleware-protected routes |
+| **Review System** | Authenticated users can rate and review hotels and places with a star-rating UI |
+| **Password Recovery** | Forgot/reset password flow with token-based email verification |
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| **Framework** | Next.js 15 (App Router) |
+| **Language** | TypeScript 5.8 |
+| **UI** | React 19, Tailwind CSS 4 |
+| **Auth** | NextAuth.js 4 (JWT strategy) |
+| **HTTP** | Axios, Fetch API |
+| **Maps** | Google Maps API (`@react-google-maps/api`) |
+| **Icons** | React Icons (Font Awesome) |
+| **Containerization** | Docker (multi-stage Alpine build) |
+
+---
+
+**Key patterns:**
+- **Centralized config** — All backend URLs driven by `NEXT_PUBLIC_BACKEND_URL` env var with production fallback
+- **JWT auth flow** — NextAuth handles session management; `fetchWithAuth` utility attaches tokens to API calls
+- **Middleware protection** — Server-side route guards for authenticated pages
+- **Docker-ready** — Multi-stage `Dockerfile` for optimized production images
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** ≥ 18
+- **npm** ≥ 9
+
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/<your-username>/CrimsonCompass_FE.git
+cd CrimsonCompass_FE
+npm install
+```
+
+### 2. Configure Environment
+
+Create a `.env.local` file in the project root:
+
+```env
+# Required
+NEXTAUTH_SECRET=your-secret-key
+NEXTAUTH_URL=http://localhost:3000
+
+NEXT_PUBLIC_BACKEND_URL=https://your-backend-service-url
+NEXT_PUBLIC_OAUTH_URL=https://your-oauth-service-url
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your-google-maps-key
+```
+
+### 3. Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+### 5. Docker
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+docker build -t crimson-compass-fe .
+docker run -p 3000:3000 crimson-compass-fe
+```

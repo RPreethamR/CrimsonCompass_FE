@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation"; 
+import { ClientConfig } from "@/app.config";
+import { useRouter } from "next/navigation";
 
 interface LoginFormProps {
   onSignupClick: () => void;
@@ -28,7 +29,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
         email,
         password,
       });
-      
+
       if (result?.error) {
         setError(result.error);
       } else {
@@ -44,29 +45,30 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
   };
 
   const handleOAuthLogin = () => {
-    // Replace the URL with your actual OAuth endpoint
-    window.location.href = "http://localhost:8081/oauth2/authorization/google"; //TO-DO
+    const oauthBaseUrl =
+      process.env.NEXT_PUBLIC_OAUTH_URL || ClientConfig.backendUrl;
+    window.location.href = `${oauthBaseUrl}/oauth2/authorization/google`;
   };
 
   return (
     <div className="flex flex-col md:flex-row">
       <div className="hidden md:block w-full md:w-1/2">
-        <img 
-          src="/images/tokyo.jpg" 
-          alt="Login Visual" 
+        <img
+          src="/images/tokyo.jpg"
+          alt="Login Visual"
           className="object-cover h-full w-full"
         />
       </div>
       <div className="w-full md:w-1/2 p-4">
         <form onSubmit={handleSubmit} className="space-y-4">
           <h2 className="text-xl font-semibold">Login</h2>
-          
+
           {error && (
             <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
               {error}
             </div>
           )}
-          
+
           <div>
             <label
               htmlFor="email"
@@ -83,7 +85,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
           </div>
-          
+
           <div>
             <label
               htmlFor="password"
@@ -100,7 +102,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
           </div>
-          
+
           <button
             type="submit"
             disabled={isLoading}
@@ -108,7 +110,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
           >
             {isLoading ? "Loading..." : "Continue"}
           </button>
-          
+
           <p className="mt-4 text-sm text-center text-gray-600">
             Don't have an account?{" "}
             <span
@@ -131,22 +133,22 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
         </form>
 
         {/* --- OAuth Section --- */}
-      <div className="mt-6">
-        <div className="flex items-center my-4">
-          <hr className="flex-grow border-gray-300" />
-          <span className="mx-2 text-gray-500 text-sm">or</span>
-          <hr className="flex-grow border-gray-300" />
-        </div>
+        <div className="mt-6">
+          <div className="flex items-center my-4">
+            <hr className="flex-grow border-gray-300" />
+            <span className="mx-2 text-gray-500 text-sm">or</span>
+            <hr className="flex-grow border-gray-300" />
+          </div>
 
-        <div className="space-y-2">
-          <button
-            onClick={handleOAuthLogin}
-            className="w-full flex items-center justify-center gap-2 bg-red-500 text-white py-2 px-4 rounded-md"
-          >
-            <span>G</span> Sign in with Google
-          </button>
+          <div className="space-y-2">
+            <button
+              onClick={handleOAuthLogin}
+              className="w-full flex items-center justify-center gap-2 bg-red-500 text-white py-2 px-4 rounded-md"
+            >
+              <span>G</span> Sign in with Google
+            </button>
+          </div>
         </div>
-      </div>
       </div>
     </div>
   );

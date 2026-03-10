@@ -1,18 +1,28 @@
+"use client";
+
 import { getSession } from "next-auth/react";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 
+interface ReviewProps {
+  forId: number;
+  forEntity: "hotel" | "place";
+  onReviewSubmitted?: () => void;
+}
+
 export default function Review({
   forId,
   forEntity,
-}: {
-  forId: number;
-  forEntity: "hotel" | "place";
-}) {
+  onReviewSubmitted,
+}: ReviewProps) {
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<{
+    text: string;
+    type: "success" | "error";
+  } | null>(null);
 
   const handleSubmitReview = async () => {
     setSubmitting(true);
@@ -35,16 +45,16 @@ export default function Review({
       });
 
       if (res.ok) {
-        alert("Review submitted!");
+        setStatusMessage({ text: "Review submitted!", type: "success" });
         setReviewText("");
         setRating(0);
-        window.location.reload()
+        onReviewSubmitted?.();
       } else {
-        alert("Failed to submit review");
+        setStatusMessage({ text: "Failed to submit review.", type: "error" });
       }
     } catch (err) {
       console.error("Error submitting review:", err);
-      alert("Something went wrong");
+      setStatusMessage({ text: "Something went wrong.", type: "error" });
     } finally {
       setSubmitting(false);
     }
@@ -60,11 +70,10 @@ export default function Review({
           {[1, 2, 3, 4, 5].map((star) => (
             <FaStar
               key={star}
-              className={`mr-2 cursor-pointer ${
-                (hoverRating || rating) >= star
+              className={`mr-2 cursor-pointer ${(hoverRating || rating) >= star
                   ? "text-yellow-500"
                   : "text-gray-300"
-              }`}
+                }`}
               onMouseEnter={() => setHoverRating(star)}
               onMouseLeave={() => setHoverRating(0)}
               onClick={() => setRating(star)}
@@ -92,6 +101,17 @@ export default function Review({
             {submitting ? "Submitting..." : "Submit Review"}
           </button>
         </div>
+
+        {statusMessage && (
+          <p
+            className={`mt-3 text-sm font-medium ${statusMessage.type === "success"
+                ? "text-green-600"
+                : "text-red-600"
+              }`}
+          >
+            {statusMessage.text}
+          </p>
+        )}
       </div>
     </>
   );

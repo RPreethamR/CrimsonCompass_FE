@@ -6,7 +6,7 @@ type DropDownControl = (toShowDropDown: boolean) => void;
 
 export default function useSearchHotelAndPlaces(
   query: string,
-  setShowDropdown: DropDownControl = () => {},
+  setShowDropdown: DropDownControl = () => { },
   queryType: "HOTEL" | "PLACE" | "BOTH" = "BOTH",
   isSelectedRef?: RefObject<Boolean>
 ) {
@@ -19,7 +19,7 @@ export default function useSearchHotelAndPlaces(
       return;
     }
 
-    if(isSelectedRef?.current){
+    if (isSelectedRef?.current) {
       isSelectedRef.current = false;
       return;
     }
@@ -32,11 +32,10 @@ export default function useSearchHotelAndPlaces(
         queryType === "HOTEL"
           ? hotelSearchURL
           : queryType === "PLACE"
-          ? placeSearchURL
-          : bothQueryURL
+            ? placeSearchURL
+            : bothQueryURL
       );
       const data = await res.json();
-      console.log(data)
       setSearchResults(data);
       setShowDropdown(true);
     } catch (error) {

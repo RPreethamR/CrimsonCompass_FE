@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 import { SessionProvider, useSession, signOut } from "next-auth/react";
 
 interface AuthContextProps {
@@ -10,7 +10,7 @@ interface AuthContextProps {
   initialModalView: "login" | "signup";
   isAuthenticated: boolean;
   isLoading: boolean;
-  user: any;
+  user: { name?: string | null; email?: string | null; image?: string | null; accessToken?: string } | undefined;
   logout: () => Promise<void>;
 }
 

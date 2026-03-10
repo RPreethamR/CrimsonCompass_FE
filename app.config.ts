@@ -1,8 +1,11 @@
-// This would connect to your actual backend API
+const BACKEND_URL =
+    process.env.NEXT_PUBLIC_BACKEND_URL ||
+    "https://ccmain-hzcbg5c8hzh4dwfc.centralus-01.azurewebsites.net";
+
 export const ServerConfig = {
-    backendUrl :  "https://ccmain-hzcbg5c8hzh4dwfc.centralus-01.azurewebsites.net"
-}
+    backendUrl: BACKEND_URL,
+};
 
 export const ClientConfig = {
-    backendUrl :  "https://ccmain-hzcbg5c8hzh4dwfc.centralus-01.azurewebsites.net"
-}
+    backendUrl: BACKEND_URL,
+};

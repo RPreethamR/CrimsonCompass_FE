@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Suspense } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { ClientConfig } from "@/app.config";
 
 // Inner component that uses useSearchParams
 function ResetPasswordForm() {
@@ -16,7 +17,7 @@ function ResetPasswordForm() {
 
   const handleReset = async () => {
     try {
-      await axios.post("http://localhost:8080/api/auth/reset-password", {
+      await axios.post(`${ClientConfig.backendUrl}/api/auth/reset-password`, {
         token,
         newPassword: password,
       });
@@ -44,7 +45,7 @@ function ResetPasswordForm() {
       >
         Reset Password
       </button>
-      
+
       {message && (
         <div className="mt-4 text-center text-sm text-gray-700">
           <p>{message}</p>

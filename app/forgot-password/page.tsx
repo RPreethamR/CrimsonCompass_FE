@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import axios from "axios";
+import { ClientConfig } from "@/app.config";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -9,7 +10,7 @@ export default function ForgotPasswordPage() {
 
   const handleRequestReset = async () => {
     try {
-      await axios.post("http://localhost:8080/api/auth/request-reset", { email });
+      await axios.post(`${ClientConfig.backendUrl}/api/auth/request-reset`, { email });
       setMessage("Reset link sent to your email.");
     } catch (err) {
       setMessage("Error sending reset link. Try again.");

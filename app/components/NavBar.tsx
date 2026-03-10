@@ -24,10 +24,9 @@ export default function NavBar() {
         </h1>
 
         <div className="hidden md:flex space-x-6">
-          <Link href="/flights" className="text-white-700 hover:text-blue-600">Flights</Link>
-          <Link href="/accommodations" className="text-white-700 hover:text-blue-600">Accommodations</Link>
-          <Link href="/bookings" className="text-white-700 hover:text-blue-600">Bookings</Link>
-          <Link href="/itinerary" className="text-white-700 hover:text-blue-600">Itinerary</Link>
+          <Link href="/flights" className="text-white hover:text-gray-300">Flights</Link>
+          <Link href="/bookings" className="text-white hover:text-gray-300">Bookings</Link>
+          <Link href="/itinerary" className="text-white hover:text-gray-300">Itinerary</Link>
         </div>
 
         {/* Only show SearchBar if NOT on the homepage */}
